@@ -1,38 +1,48 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
+import { Engine } from "react-babylonjs";
+import { Vector3 } from "@babylonjs/core/Maths/math.vector";
+import { PhysicsImpostor } from "@babylonjs/core/Physics/physicsImpostor";
+
 import "./App.css";
+import { BjsScene } from "./BjsScene";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <div className="App">
-      <div>
-        <a href="https://reactjs.org" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-      </div>
-      <h1>React + Vite</h1>
-      <h2>On CodeSandbox!</h2>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR.
-        </p>
+    <div id="wrap">
+      <h2 style={{ flex: 0, margin: "0.5rem" }}>Menu</h2>
+      <div style={{ flex: 1 }}>
+        <Engine antialias adaptToDeviceRatio canvasId="babylon-canvas">
+          <BjsScene>
+            <freeCamera
+              name="camera1"
+              position={new Vector3(0, 5, -10)}
+              setTarget={[Vector3.Zero()]}
+            />
 
-        <p>
-          Tip: you can use the inspector button next to address bar to click on
-          components in the preview and open the code in the editor!
-        </p>
+            <hemisphericLight
+              name="light1"
+              intensity={0.7}
+              direction={new Vector3(0, 1, 0)}
+            />
+            <ground name="ground" width={6} height={6}>
+              <physicsImpostor
+                type={PhysicsImpostor.BoxImpostor}
+                _options={{ mass: 0, restitution: 0.9 }}
+              />
+            </ground>
+            <box
+              name="box"
+              size={2}
+              position={new Vector3(0, 2, 0)}
+              rotation={Vector3.Zero()}
+            >
+              <physicsImpostor
+                type={PhysicsImpostor.BoxImpostor}
+                _options={{ mass: 1, restitution: 0.9 }}
+              />
+            </box>
+          </BjsScene>
+        </Engine>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </div>
   );
 }
